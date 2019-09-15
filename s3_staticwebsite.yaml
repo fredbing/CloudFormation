@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: S3 Bucket for Static Website
+Resources:
+  BinggangLiux1Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+        WebsiteConfiguration:
+            IndexDocument: index.html
+            ErrorDocument: error.html
+        AccessControl: PublicRead
+  BinggangLiux1BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+        Bucket:
+            Ref: BinggangLiux1Bucket
+        PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+                - Sid: PublicReadForGetBucketObjects
+                  Effect: Allow
+                  Principal: '*'
+                  Action: 'S3:GetObject'
+                  Resource: !Join
+                    - ''
+                    - - Fn::GetAtt: [ BinggangLiux1Bucket, Arn ]
+                      - /*
+                      
+                         
+Outputs:
+    WebsiteBucketName:
+        Value:
+            Ref: BinggangLiux1Bucket
+    BinggangLiux1BucketURL:
+        Value:
+            Fn::GetAtt: [ BinggangLiux1Bucket, WebsiteURL ]
+        Description: URL for BinggangLiux1 S3 bucket website
+
